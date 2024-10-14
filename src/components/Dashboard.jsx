@@ -8,7 +8,6 @@ import { FavoritesContext } from "../contexts/FavoritesContext";
 // ---- OMDb API URL -----
 const API_URL = "https://www.omdbapi.com/?apikey=66f12840";
 
-
 const Dashboard = () => {
   const [movies, setMovies] = useState([]); 
   const [loading, setLoading] = useState(false); 
