@@ -8,15 +8,14 @@ const API_KEY = "66f12840";
 
 
 const MovieDetails = () => {
-  const { imdbID } = useParams(); 
+  const { id } = useParams(); 
   const [movie, setMovie] = useState(null); 
   
-
 //   fetched data 
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${imdbID}`);
+        const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${id}`);
         const data = await response.json();
 
         if (data.Response === "True") {
@@ -29,7 +28,7 @@ const MovieDetails = () => {
       } 
     };
     fetchMovieDetails(); 
-  }, [imdbID]);
+  }, [id]);
 
   if (!movie) {
     return <div>No movie details available.</div>; 
@@ -37,12 +36,17 @@ const MovieDetails = () => {
 
   return (
     <div>
-      <h1>{movie.Title} ({movie.Year})</h1>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      {/* <h1>{movie.Title} ({movie.Year})</h1> */}
+      {/* <img src={movie.Poster} alt={`${movie.Title} poster`} /> */}
+      <h1>{movie.Title || "Title not available"} ({movie.Year || "Year not available"})</h1>
+      <img 
+        src={movie.Poster && movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450"} 
+        alt={`${movie.Title} poster`} 
+      />
       <p><strong>Director:</strong> {movie.Director}</p>
+      {/* <p><strong>Director:</strong> {movie.Director || "N/A"}</p> */}
       <p><strong>Plot:</strong> {movie.Plot}</p>
       <p><strong>Rating:</strong> {movie.imdbRating}</p>
-      
     </div>
   );
 };
