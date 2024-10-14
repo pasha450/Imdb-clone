@@ -8,6 +8,7 @@ import { FavoritesContext } from "../contexts/FavoritesContext";
 // ---- OMDb API URL -----
 const API_URL = "https://www.omdbapi.com/?apikey=66f12840";
 
+
 const Dashboard = () => {
   const [movies, setMovies] = useState([]); 
   const [loading, setLoading] = useState(false); 
@@ -61,14 +62,14 @@ const Dashboard = () => {
 					<div id="responsive-nav">
 						<ul className="main-nav nav navbar-nav">
 							<li className="active"><Link to="#">Home</Link></li>
-							<li><Link to="/selected">Favourite</Link></li>
+							<li><Link to="/favourite">Favourite</Link></li>
 							<li><Link to="#">Help</Link></li>
 						</ul>
 					</div>
 				</div>
 		  </nav>
 			{/* Movies Section */}
-		  <div className="section">
+		  <div className="section ">
 			<div className="container">
 				<div className="row">
 				{loading && (<div className="col-md-12">
@@ -81,17 +82,19 @@ const Dashboard = () => {
 				{/* Display movies */}
 				{!loading && !error && movies.length > 0 && (
 					movies.map((movie) => (
-					<div className="col-md-4 col-xs-6" key={movie.imdbID}>
+					<div className="col-md-4 col-xs-6 " key={movie.imdbID}>
 						<div className="shop">
 						<div className="shop-img">
 							<img
 							src={movie.Poster !== "N/A" ? movie.Poster : "./assests/img/badnews.jpg"}
 							alt={movie.Title}
+							style={{ width: "355px", height: "400px", objectFit: "cover" }} // Set a fixed size
+
 							/>	
 						</div>
 						<br />
 						<h4 className="card__title">
-							<Link to={`/movie/${movie.imdbID}`}>{movie.Title} ({movie.Year})</Link>
+							<Link to={`/movie/${movie.imdbID}`}>{movie.Title}({movie.Year})</Link>
 						</h4>
 						<span className="card__category">
 							<span style={{ width: "40%" }}>

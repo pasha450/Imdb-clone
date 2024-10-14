@@ -53,9 +53,10 @@ const Header = ({ onSearch }) => {
           <div className="row">
             <div className="col-md-3">
               <div className="header-logo">
-                <Link to="#" className="logo">
-                  <img src="./assests/img/logo.png" alt="Logo" />
-                </Link>
+              <Link to=" " className="logo">
+                <img src="/assests/img/logo.png" alt="Logo" />
+              </Link>
+
               </div>
             </div>
 

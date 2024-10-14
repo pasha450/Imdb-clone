@@ -24,7 +24,7 @@ const Favourite = () => {
               <div className="section__wrap">
                 <h2 className="section__title">Favourite
 				        <img src="./assests/img/fav.gif" 
-                  alt="Favourite GIF"
+                 
                   style={{ width: '10%',}} 
                 />
 						    </h2> 
@@ -52,8 +52,10 @@ const Favourite = () => {
                   <div className="shop">
                     <div className="shop-img">
                       <img
-                        src={movie.Poster !== "N/A" ? movie.Poster : "./assets/img/badnews.jpg"}
+                        src={movie.Poster !== "N/A" ? movie.Poster : "./assests/img/badnews.jpg"}
                         alt={movie.Title}
+                        style={{ width: "355px", height: "400px", objectFit: "cover" }} // Set a fixed size
+
                         className="img-fluid"
                       />	
                     </div>
