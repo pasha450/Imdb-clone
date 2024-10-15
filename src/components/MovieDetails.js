@@ -131,8 +131,8 @@ const MovieDetails = () => {
                 <div className="footer">
                   <h3 className="footer-title">Download Our App</h3>
                   <ul className="footer__app">
-                  <li><Link to="#"><img src="./assests/img/store.svg" alt=""/></Link></li> <br></br>
-                  <li><Link to ="#"><img src="./assests/img/google-play-badge.png" alt="" className="custom-logo"/></Link></li>
+                  <li><Link to="#"><img src="/assests/img/store.svg" alt="store"/></Link></li> <br></br>
+                  <li><Link to ="#"><img src="/assests/img/google-play-badge.png" alt="" className="custom-logo"/></Link></li>
                   </ul>
                 </div>
               </div>
