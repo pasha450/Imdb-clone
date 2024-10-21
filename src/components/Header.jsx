@@ -11,7 +11,7 @@ const Header = ({ onSearch }) => {
     e.preventDefault();
     const trimmedTerm = searchTerm.trim();
     if (trimmedTerm) {
-      onSearch(trimmedTerm); // Trigger search in parent component
+      onSearch(trimmedTerm); 
     }
   };
 
@@ -56,25 +56,26 @@ const Header = ({ onSearch }) => {
               <Link to=" " className="logo">
                 <img src="/assests/img/logo.png" alt="Logo" />
               </Link>
-
               </div>
             </div>
-
             {/* Search Bar */}
             <div className="col-md-6">
               <div className="header-search">
                 <form onSubmit={handleSubmit}>
+              <select class="search-type-dropdown">
+                <option value ="All">All</option>
+                <option value="movie">Movie</option>
+                <option value="series">Series</option>
+                <option value="episode">Episode</option>
+              </select>
                   <input
                     className="input"
                     type="text"
                     placeholder="Search for a movie, TV Series"
                     value={searchTerm}
-                    // onChange={(e) => setSearchTerm(e.target.value)}
                     onChange={handleInputChange}
                   />
-                 
                   <i class="fa-solid fa-magnifying-glass-location custom-icon  icon-spacing" ></i>
-                 
                 </form>
               </div>
             </div>

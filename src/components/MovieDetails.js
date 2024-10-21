@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom'; // Import Link for navigation
+import { useParams, Link } from 'react-router-dom';
+import Loading from './loading'; 
 
 const API_URL = "https://www.omdbapi.com/";
 const API_KEY = "66f12840";
 
 const MovieDetails = () => {
-  const { id } = useParams(); 
-  const [movie, setMovie] = useState(null); 
-  
-  // Fetch movie details 
+  const { id } = useParams();
+  const [movie, setMovie] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userRating, setUserRating] = useState(0);
+
   useEffect(() => {
     const fetchMovieDetails = async () => {
+      setLoading(true); // Start loading
       try {
-        const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${id}`);
+        const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${id}&plot=full`);
         const data = await response.json();
 
         if (data.Response === "True") {
@@ -22,14 +25,33 @@ const MovieDetails = () => {
         }
       } catch (error) {
         console.error("Error fetching movie details:", error);
-      } 
+      } finally {
+        setLoading(false); // End loading
+      }
     };
-
-    fetchMovieDetails(); 
+    fetchMovieDetails();
   }, [id]);
 
+  useEffect(() => {
+    const storedRating = localStorage.getItem(`rating-${id}`);
+    if (storedRating) {
+      setUserRating(parseFloat(storedRating));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    const storedRating = localStorage.getItem(`rating-${id}`);
+    if (storedRating) {
+      setUserRating(parseFloat(storedRating));
+    }
+  }, [id]);
+
+  if (loading) {
+    return <Loading />; 
+  }
+
   if (!movie) {
-    return <div>No movie details available.</div>; 
+    return <div>No movie details available.</div>;
   }
 
   return (
@@ -62,26 +84,44 @@ const MovieDetails = () => {
         </div>
       </header>
 
-      {/* Movie Details Section */}
+      {/* Movie Details Section */} 
       <div style={{
                     display: 'flex', 
                     justifyContent: 'space-between',
                     padding: '30px' 
                     }}>
-        <div style={{ marginRight: '60px' }}>
+        <div className='fade-in' style={{ marginRight: '60px' }}>
           <img 
             src={movie.Poster && movie.Poster !== "N/A" ? movie.Poster : "https://via.placeholder.com/300x450"} 
             alt={`${movie.Title} poster`} 
             // for the poster
-            style={{ width: '350px', height: '450px', borderRadius: '20px',}} 
+            style={{ width: '350px', height: '450px', borderRadius: '20px' }} 
           />
         </div>
-        
-        <div style={{ flex: 1 }}> {/* This div will take the remaining space */}
+         
+        <div className="fade-in" style={{ flex: 1 }}> {/* This div will take the remaining space */}
           <h1>{movie.Title || "Title not available"} ({movie.Year || "Year not available"})</h1>
           <p><strong>Director:</strong> {movie.Director || "N/A"}</p>
           <p><strong>Plot:</strong> {movie.Plot || "N/A"}</p>
-          <p><strong>Rating:</strong> {movie.imdbRating || "N/A"}</p>
+          <p><strong>Genre:</strong> {movie.Genre || "N/A"}</p>
+          <p><strong>IMDB Rating:</strong> {movie.imdbRating || "N/A"}</p>
+          
+          {/* User Rating Section */}
+          <div id="user-rating" style={{ marginTop: '20px' }}>
+            <h2>Your Rating:</h2>
+            <div className="rating-group">
+              {/* Generate 5 stars */} 
+              {[1, 2, 3, 4, 5].map((star, index) => (
+                <React.Fragment key={star}> 
+                  <label aria-label={`${star} star`} className="rating__label" htmlFor={`user-rating-${star}`}>
+                    <i className={index<2 ? 'rating__icon rating__icon--star fa fa-star rated':'rating__icon rating__icon--star fa fa-star not-rated'}></i>
+                  </label>
+                </React.Fragment>
+              ))} 
+            </div>
+            <p className="desc" style={{ marginBottom: '2rem', fontFamily: 'sans-serif', fontSize: '0.9rem' }}>  
+            </p>
+          </div>      
         </div>
       </div>
 
@@ -131,8 +171,9 @@ const MovieDetails = () => {
                 <div className="footer">
                   <h3 className="footer-title">Download Our App</h3>
                   <ul className="footer__app">
-                  <li><Link to="#"><img src="/assests/img/store.svg" alt="store"/></Link></li> <br></br>
-                  <li><Link to ="#"><img src="/assests/img/google-play-badge.png" alt="" className="custom-logo"/></Link></li>
+                    <li><Link to="#"><img src="/assests/img/store.svg" alt="store"/></Link></li> 
+                    <br />
+                    <li><Link to="#"><img src="/assests/img/google-play-badge.png" alt="" className="custom-logo"/></Link></li>
                   </ul>
                 </div>
               </div>

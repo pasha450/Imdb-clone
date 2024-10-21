@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FavoritesContext } from "../contexts/FavoritesContext";
 
@@ -7,16 +7,14 @@ const Favourite = () => {
 
 //   alert for remove the movies 
   const handleRemove = (movieId) => {
-    const confirmRemoval = window.confirm("Are you sure you want to remove this movie from favourites?");
+  const confirmRemoval = window.confirm("Are you sure you want to remove this movie from favourites?");
     if (confirmRemoval) {
       removeFromFavorites(movieId);
     }
   };
 
-
   return (
     <>   
-      
       <section className="section section--first section--bg" data-bg="img/section/section.jpg">
         <div className="container">
           <div className="row">
@@ -74,10 +72,10 @@ const Favourite = () => {
                           color: "#fff",
                           borderRadius: "3px",
                           height: "30px",
-						   marginLeft: "10px"
+						              marginLeft: "10px"
                         }}
-						onClick={() => handleRemove(movie.imdbID)} 
-                      >
+					            	onClick={() => handleRemove(movie.imdbID)} 
+                        >
                         Remove
                       </button>
                     </span>
@@ -93,83 +91,85 @@ const Favourite = () => {
       </div>
 
       {/* Footer Section */}
+     
       <footer id="footer">
-        <div className="section">
-          <div className="container">
-            <div className="row">
-              {/* About Us */}
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">About Us</h3>
-                  <ul className="footer-links">
-                    <li><Link to="#"><i className="fa fa-map-marker"></i>1734 Stonecoal Road </Link></li>
-                    <li><Link to="#"><i className="fa fa-phone"></i>+021-95-51-84</Link></li>
-                    <li><Link to="#"><i className="fa fa-envelope-o"></i>email@email.com</Link></li>
-                  </ul>
-                </div>
-              </div>
+			<div className="section">
+				<div className="container">
+					<div className="row">
+						<div className="col-md-3 col-xs-6">
+							<div className="footer">
+								<h3 className="footer-title">About Us</h3>
+								<ul className="footer-links">
+									<li><Link to="#"><i className="fa fa-map-marker"></i>1734 Stonecoal Road </Link></li>
+									<li><Link to="#"><i className="fa fa-phone"></i>+021-95-51-84</Link></li>
+									<li><Link to="#"><i className="fa fa-envelope-o"></i>email@email.com</Link></li>
+								</ul>
+							</div>
+						</div>
 
-              {/* Categories */}
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Categories</h3>
-                  <ul className="footer-links">
-                    <li><Link to="#">Bollywood movie</Link></li>
-                    <li><Link to="#">Hollywood movies</Link></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="clearfix visible-xs"></div>
+						<div className="col-md-3 col-xs-6">
+							<div className="footer">
+								<h3 className="footer-title">Categories</h3>
+								<ul className="footer-links">
+									
+									<li><Link to="#">Bollywood movie</Link></li>
+									<li><Link to="#">Hollywood movies</Link></li>
+								</ul>
+							</div>
+						</div>
+						<div className="clearfix visible-xs"></div>
 
-              {/* Legal */}
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Legal</h3>
-                  <ul className="footer-links">
-                    <li><a href="#">Terms of Use</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Security</a></li>
-                  </ul>
-                </div>
-              </div>
+						<div className="col-md-3 col-xs-6">
+							<div className="footer">
+								<h3 className="footer-title">Legal</h3>
+								<ul className="footer-links">
+									<li><a href="#">Terms of Use</a></li>
+									<li><a href="#">Privacy Policy</a></li>
+									<li><a href="#">Security</a></li>
+						      </ul>
+							</div>
+						</div>
 
-              {/* Download Our App */}
-              <div className="col-md-3 col-xs-6">
-                <div className="footer">
-                  <h3 className="footer-title">Download Our App</h3>
-                  <ul className="footer__app">
-                    <li><Link to="#"><img src="./assests/img/store.svg" alt="Store" /></Link></li>
-                    <li><Link to="#"><img src="./assests/img/google-play-badge.png" alt="Google Play" className="custom-logo" /></Link></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+						<div className="col-md-3 col-xs-6">
+							<div className="footer">
+								<h3 className="footer-title">Download Our App</h3>
+									<ul class="footer__app">
+							<li><Link to="#"><img src="./assests/img/store.svg" alt=""/></Link></li> <br></br>
+							<li><Link to ="#"><img src="./assests/img/google-play-badge.png" alt="" className="custom-logo"/></Link></li>
+						</ul>
+				                 	</div>
+								
+							</div>
+						</div>
+					</div>
+				</div>
+			
 
-        {/* Bottom Footer */}
-        <div id="bottom-footer" className="section">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-12 text-center">
-                <ul className="footer-payments">
-                  <li><Link to="#"><i className="fa fa-cc-visa"></i></Link></li>
-                  <li><Link to="#"><i className="fa fa-credit-card"></i></Link></li>
-                  <li><Link to="#"><i className="fa fa-cc-paypal"></i></Link></li>
-                  <li><Link to="#"><i className="fa fa-cc-mastercard"></i></Link></li>
-                  <li><Link to="#"><i className="fa fa-cc-discover"></i></Link></li>
-                  <li><Link to="#"><i className="fa fa-cc-amex"></i></Link></li>
-                </ul>
-                <span className="copyright">
-                  &copy; {new Date().getFullYear()} All rights reserved | This template is made with 
-                  <i className="fa fa-heart-o" aria-hidden="true"></i>
-                  by <Link to="https://colorlib.com" target="_blank" rel="noopener noreferrer">Colorlib</Link>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+			<div id="bottom-footer" className="section">
+				<div className="container">
+					<div className="row">
+						<div className="col-md-12 text-center">
+							<ul className="footer-payments">
+								<li><Link to="#"><i className="fa fa-cc-visa"></i></Link></li>
+								<li><Link to="#"><i className="fa fa-credit-card"></i></Link></li>
+								<li><Link to="#"><i className="fa fa-cc-paypal"></i></Link></li>
+								<li><Link to="#"><i className="fa fa-cc-mastercard"></i></Link></li>
+								<li><Link to="#"><i className="fa fa-cc-discover"></i></Link></li>
+								<li><Link to="#"><i className="fa fa-cc-amex"></i></Link></li>
+							</ul>
+							<span className="copyright">
+								Copyright &copy;
+                                <script>
+                                    document.write(new Date().getFullYear());</script>
+                                     All rights reserved | This template is made with 
+                                     <i className="fa fa-heart-o" aria-hidden="true"></i>
+                                      by <Link to="https://colorlib.com" target="_blank">Colorlib</Link>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
     </>
   );
 };

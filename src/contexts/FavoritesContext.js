@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect } from 'react';
 
+
 export const FavoritesContext = createContext();
+
 
 // Provider Component
 export const FavoritesProvider = ({ children }) => {
@@ -11,9 +13,9 @@ export const FavoritesProvider = ({ children }) => {
     const storedFavorites = localStorage.getItem('react-movie-app-favorites');
     if (storedFavorites) {
       setFavorites(JSON.parse(storedFavorites)); // Parse stored JSON string to array
-    }
+    } 
   }, []);
-
+   
   // Save favorites to localStorage whenever favorites state changes
   useEffect(() => {
     if (favorites.length > 0) {

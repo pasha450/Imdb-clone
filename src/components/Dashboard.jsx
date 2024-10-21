@@ -1,13 +1,13 @@
-
-import React, { useEffect, useState ,useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Header from "./Header"; 
 import { FavoritesContext } from "../contexts/FavoritesContext";
+import { toast, ToastContainer } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';
+import Loading from "./loading";
 
 
-// ---- OMDb API URL -----
 const API_URL = "https://www.omdbapi.com/?apikey=66f12840";
-
 
 const Dashboard = () => {
   const [movies, setMovies] = useState([]); 
@@ -15,127 +15,130 @@ const Dashboard = () => {
   const [error, setError] = useState(null); 
 
   const { favorites, addToFavorites, removeFromFavorites } = useContext(FavoritesContext); 
+  
+  // Function to search movies based on title and type 
+  const searchMovies = async (title, type = "movie") => {
+    setLoading(true); 
+    setError(null); 
+    if(title == ''){
+      setError("Please Enter the Movie Title");
+      setLoading(false); 
+      return false;
+    }
+    try {
+      const response = await fetch(`${API_URL}&s=${encodeURIComponent(title)}&type=${type}&y=2024`);
+      const data = await response.json();
 
-  // Function to search movies based on title
-    const searchMovies = async (title) => {
-		setLoading(true); 
-		setError(null); 
-		try {
-			const response = await fetch(`${API_URL}&s=${encodeURIComponent(title)}&y=2024`);
-			const data = await response.json();
-            
-			if (data.Response === "True") {
-// Update movies state with fetched data
-			setMovies(data.Search); 
-			console.log(data.Search, "Movies fetched!");
-			} else {
-			setMovies([]); 
-			setError(data.Error || "No movies found.");
-			console.log("No movies found.");
-			}
-		} catch (err) {
-			console.error("Error fetching movies:", err);
-			setError("An error occurred while fetching data.");
-			setMovies([]);
-		} finally {
-			setLoading(false); 
-		}
-		};
+      if (data.Response === "True") {
+        setMovies(data.Search); 
+        console.log(data.Search, "Movies fetched!");
+      } else {
+        setMovies([]); 
+        setError(data.Error || "No results found.");
+        console.log("No results found.");
+      }
+    } catch (err) {
+      console.error("Error fetching movies:", err);
+      setError("An error occurred while fetching data.");
+      setMovies([]);
+    } finally {
+      setLoading(false); 
+    }
+  };
+   
+  // Fetch default movies 
+  useEffect(() => {
+    searchMovies("Batman", "movie"); 
+  }, []);
 
-	// Fetch default movies 
-		useEffect(() => {
-			searchMovies("Batman"); 
-		}, []);
+  // for add the loader in this file 
+  if (loading) {
+    return <Loading />; 
+  }
 
-	// Check if a movie is already in favorites
-		const isFavorite = (movieId) => {
-			return favorites.some((movie) => movie.imdbID === movieId);
-		};
+  // Check if a movie is already in favorites
+  const isFavorite = (movieId) => {
+    return favorites.some((movie) => movie.imdbID === movieId);
+  };
+
+  // Handle add/remove favorite with toaster notifications
+  const handleFavoriteClick = (movie) => {
+    if (isFavorite(movie.imdbID)) {
+      removeFromFavorites(movie.imdbID);
+      toast.error("Removed from Favorites!");
+    } else {
+      addToFavorites(movie);
+      toast.success("Added to Favorites!");
+    }
+  };
+
   return (
-    <> 
-        
-      {/* Header Component with onSearch callback */}
+    <>
       <Header onSearch={searchMovies} />
+      <ToastContainer position="top-right" autoClose={3000} /> {/* Toast container */}
+      
+      <nav id="navigation">
+        <div className="container">
+          <div id="responsive-nav">
+            <ul className="main-nav nav navbar-nav">
+              <li className="active"><Link to="#">Home</Link></li>
+              <li><Link to="/favourite">Favourite</Link></li>
+              <li><Link to="#">Help</Link></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+       
+      <div className="section">
+        <div className="container">
+          <div className="row">
+            {loading && (
+              <div className="col-md-12">
+                <img src={"../assests/img/load.gif"} alt="Loading..." style={{ width: "50px", height: "50px" }} />
+              </div> 
+            )}
+            {error && !loading && <div className="col-md-12"><h2>{error}</h2></div>}
 
-	  <nav id="navigation">
-				<div className="container">
-					<div id="responsive-nav">
-						<ul className="main-nav nav navbar-nav">
-							<li className="active"><Link to="#">Home</Link></li>
-							<li><Link to="/favourite">Favourite</Link></li>
-							<li><Link to="#">Help</Link></li>
-						</ul>
-					</div>
-				</div>
-		  </nav>
-			{/* Movies Section */}
-		  <div className="section ">
-			<div className="container">
-				<div className="row">
-				{loading && (<div className="col-md-12">
-					<img src={"../assests/img/load.gif"} alt="Loading..." style={{ width: "50px", height: "50px" }} />
-					</div>
-				)}
-				{/* Display error message */}
-				{error && !loading && (<div className="col-md-12"><h2>{error}</h2></div>)}
-
-				{/* Display movies */}
-				{!loading && !error && movies.length > 0 && (
-					movies.map((movie) => (
-					<div className="col-md-4 col-xs-6 " key={movie.imdbID}>
-						<div className="shop">
-						<div className="shop-img">
-							<img
-							src={movie.Poster !== "N/A" ? movie.Poster : "./assests/img/badnews.jpg"}
-							alt={movie.Title}
-							style={{ width: "355px", height: "400px", objectFit: "cover" }} // Set a fixed size
-
-							/>	
-						</div>
-						<br />
-						<h4 className="card__title">
-							<Link to={`/movie/${movie.imdbID}`}>{movie.Title}({movie.Year})</Link>
-						</h4>
-						<span className="card__category">
-							<span style={{ width: "40%" }}>
-							<Link to={`/movie/${movie.imdbID}`}>movie</Link>
-							</span>
-							<span style={{ width: "60%", color: "white", textAlign: "right" }}>
-							<button
-								type="button"
-								className={`btn btn-sm ${isFavorite(movie.imdbID) ? 'btn-danger' : 'btn-success'}`}
-								style={{
-									padding: "0px 10px",
-									color: "#ffh",
-									borderRadius: "3px",
-									height: "30px",
-								}}
-								onClick={() => {
-									if (isFavorite(movie.imdbID)) {
-										removeFromFavorites(movie.imdbID);
-									} else {
-										addToFavorites(movie);
-									}
-								}}
-							>
-								{isFavorite(movie.imdbID) ? 'Remove from Favourite' : 'Add to Favourite'}
-							</button>
-
-							</span>
-						</span>
-						<span className="card__rate">
-							<i className="fa-solid fa-star"></i> {movie.Year}
-						</span>
-						</div>
-					</div>
-					))
-				)}
-				</div>
-			</div>
-			</div>
-
-			{/* Footer */}
-			<footer id="footer">
+            {!loading && !error && movies.length > 0 && (
+              movies.map((movie) => ( 
+                <div className="col-md-4 col-xs-6" key={movie.imdbID}>
+                  <div className="shop">
+                    <div className="shop-img">
+                      <img
+                        src={movie.Poster !== "N/A" ? movie.Poster : "./assests/img/badnews.jpg"}
+                        alt={movie.Title}
+                        style={{ width: "355px", height: "400px", objectFit: "cover" }}
+                      />
+                    </div>
+                    <br />
+                    <h4 className="card__title">
+                      <Link to={`/movie/${movie.imdbID}`}>{movie.Title} ({movie.Year})</Link>
+                    </h4>
+                    <span className="card__category">
+                      <button
+                        type="button"
+                        className={`btn btn-sm ${isFavorite(movie.imdbID) ? 'btn-danger' : 'btn-success'}`}
+                        style={{
+                          padding: "0px 10px",
+                          color: "#fff",
+                          borderRadius: "3px",
+                          height: "30px",
+                        }}
+                        onClick={() => handleFavoriteClick(movie)}
+                      >
+                        {isFavorite(movie.imdbID) ? 'Remove from Favourite' : 'Add to Favourite'}
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+      
+      {/* Footer  */} 
+      <footer id="footer">
 			<div className="section">
 				<div className="container">
 					<div className="row">
@@ -213,6 +216,8 @@ const Dashboard = () => {
 				</div>
 			</div>
 		</footer>
+
+      
     </>
   );
 };
