@@ -5,6 +5,7 @@ import { FavoritesContext } from "../contexts/FavoritesContext";
 import { toast, ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 import Loading from "./loading";
+import ReactPaginate from 'react-paginate';
 
 
 const API_URL = "https://www.omdbapi.com/?apikey=66f12840";
@@ -13,56 +14,59 @@ const Dashboard = () => {
   const [movies, setMovies] = useState([]); 
   const [loading, setLoading] = useState(false); 
   const [error, setError] = useState(null); 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
 
   const { favorites, addToFavorites, removeFromFavorites } = useContext(FavoritesContext); 
   
+  const moviesPerPage = 10; 
+
   // Function to search movies based on title and type 
-  const searchMovies = async (title, type = "movie") => {
-    setLoading(true); 
-    setError(null); 
-    if(title == ''){
+  const searchMovies = async (title, type = "movie", page = 1) => {
+    // setLoading(true);
+    setError(null);
+    if (title === '') {
       setError("Please Enter the Movie Title");
-      setLoading(false); 
+      setLoading(false);
       return false;
     }
     try {
-      const response = await fetch(`${API_URL}&s=${encodeURIComponent(title)}&type=${type}&y=2024`);
+      const response = await fetch(`${API_URL}&s=${encodeURIComponent(title)}&type=${type}&page=${page}`);
       const data = await response.json();
-
+      
       if (data.Response === "True") {
-        setMovies(data.Search); 
-        console.log(data.Search, "Movies fetched!");
+        setMovies(data.Search);
+        setTotalResults(parseInt(data.totalResults)); //total number of movies found
       } else {
-        setMovies([]); 
+        setMovies([]);
         setError(data.Error || "No results found.");
-        console.log("No results found.");
       }
     } catch (err) {
       console.error("Error fetching movies:", err);
       setError("An error occurred while fetching data.");
       setMovies([]);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
-  };
-   
-  // Fetch default movies 
-  useEffect(() => {
-    searchMovies("Batman", "movie"); 
-  }, []);
+};
 
-  // for add the loader in this file 
-  if (loading) {
-    return <Loading />; 
-  }
+// Fetch default movies 
+useEffect(() => {
+    searchMovies("all", "movie", currentPage); 
+}, [currentPage]);
 
-  // Check if a movie is already in favorites
-  const isFavorite = (movieId) => {
+// Handle page click from react-paginate
+const handlePageClick = (event) => {
+    const selectedPage = event.selected + 1; // React Paginate uses zero-based index
+    setCurrentPage(selectedPage);
+};
+
+// Check if a movie is already in favorites
+const isFavorite = (movieId) => {
     return favorites.some((movie) => movie.imdbID === movieId);
-  };
+}
 
-  // Handle add/remove favorite with toaster notifications
-  const handleFavoriteClick = (movie) => {
+const handleFavoriteClick = (movie) => {
     if (isFavorite(movie.imdbID)) {
       removeFromFavorites(movie.imdbID);
       toast.error("Removed from Favorites!");
@@ -70,13 +74,17 @@ const Dashboard = () => {
       addToFavorites(movie);
       toast.success("Added to Favorites!");
     }
-  };
+};
 
-  return (
+if (loading) {
+    return <Loading />; 
+}
+
+return (
     <>
       <Header onSearch={searchMovies} />
-      <ToastContainer position="top-right" autoClose={3000} /> {/* Toast container */}
-      
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <nav id="navigation">
         <div className="container">
           <div id="responsive-nav">
@@ -92,11 +100,6 @@ const Dashboard = () => {
       <div className="section">
         <div className="container">
           <div className="row">
-            {loading && (
-              <div className="col-md-12">
-                <img src={"../assests/img/load.gif"} alt="Loading..." style={{ width: "50px", height: "50px" }} />
-              </div> 
-            )}
             {error && !loading && <div className="col-md-12"><h2>{error}</h2></div>}
 
             {!loading && !error && movies.length > 0 && (
@@ -111,9 +114,6 @@ const Dashboard = () => {
                       />
                     </div>
                     <br />
-                    <h4 className="card__title">
-                      <Link to={`/movie/${movie.imdbID}`}>{movie.Title} ({movie.Year})</Link>
-                    </h4>
                     <span className="card__category">
                       <button
                         type="button"
@@ -136,7 +136,21 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      
+
+      {/* Pagination Component */}
+      <ReactPaginate
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        breakLabel={'...'}
+        pageCount={Math.ceil(totalResults / moviesPerPage)}
+        pageRangeDisplayed={3}
+        onPageChange={handlePageClick}
+        renderOnZeroPageCount={null} 
+        containerClassName={'pagination'}
+        activeClassName={'active'}
+        marginPagesDisplayed={1}
+      />
+
       {/* Footer  */} 
       <footer id="footer">
 			<div className="section">
@@ -216,8 +230,6 @@ const Dashboard = () => {
 				</div>
 			</div>
 		</footer>
-
-      
     </>
   );
 };

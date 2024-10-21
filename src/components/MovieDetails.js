@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Loading from './loading'; 
 
+
 const API_URL = "https://www.omdbapi.com/";
 const API_KEY = "66f12840";
 
@@ -15,8 +16,12 @@ const MovieDetails = () => {
     const fetchMovieDetails = async () => {
       setLoading(true); // Start loading
       try {
+        console.log("IDDDDD", id);
         const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${id}&plot=full`);
         const data = await response.json();
+       
+        // debugging
+        console.log("API Dataaaa:", data);
 
         if (data.Response === "True") {
           setMovie(data);
@@ -26,17 +31,10 @@ const MovieDetails = () => {
       } catch (error) {
         console.error("Error fetching movie details:", error);
       } finally {
-        setLoading(false); // End loading
+        setLoading(false); 
       }
     };
     fetchMovieDetails();
-  }, [id]);
-
-  useEffect(() => {
-    const storedRating = localStorage.getItem(`rating-${id}`);
-    if (storedRating) {
-      setUserRating(parseFloat(storedRating));
-    }
   }, [id]);
 
   useEffect(() => {

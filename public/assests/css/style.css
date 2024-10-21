@@ -472,14 +472,6 @@ textarea.input {
 	Logo
 \*----------------------------*/
 
-/* #header {
-  padding-top: 120px;
-  padding-bottom: 15px;
-  background-color: #15161D;
-  background-image: url('/assests/img/that.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-} */
 
 #header {
   position: fixed; 
@@ -1028,8 +1020,9 @@ body, #main-content {
 
 .product .product-body .product-rating>i.fa-star {
   color: #ef233c;
-}
 
+}
+  
 .product .product-body .product-rating:after {
   content: "";
   position: absolute;
@@ -1276,15 +1269,6 @@ body, #main-content {
 .products-slick-nav .slick-prev:before, .products-slick-nav .slick-next:before {
   font-size: 14px;
 }
-
-/*=========================================================
-	07 -> PRODUCTS PAGE
-===========================================================*/
-
-/*----------------------------*\
-	Aside
-\*----------------------------*/
-
 .aside+.aside {
   margin-top: 30px;
 }
@@ -1294,7 +1278,6 @@ body, #main-content {
   font-size: 18px;
   margin: 15px 0px 30px;
 }
-
 /*-- checkbox Filter --*/
 
 .checkbox-filter>div+div {
@@ -2082,7 +2065,7 @@ body, #main-content {
 }
 
 #bottom-footer {
-  background: #1E1F29;
+  background: #1E1F29;  
 }
 
 .footer {
@@ -2130,6 +2113,7 @@ body, #main-content {
   color: #15161D;
   font-size: 36px;
   display: block;
+
 }
 
 /*=========================================================
@@ -2504,3 +2488,19 @@ body, #main-content {
   -webkit-font-smoothing: antialiased;
   color :#8D99AE
 }
+
+/* for pagination button  */
+
+.pagination {
+  display: flex;
+  justify-content: flex-end; 
+  align-items: center;
+  gap: 10px; 
+  padding: 10px; 
+ color:inherit;
+}
+
+.next-button {
+  margin-left: auto; 
+}
+
