@@ -14,14 +14,11 @@ const MovieDetails = () => {
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
-      setLoading(true); // Start loading
+      setLoading(true); 
       try {
         console.log("IDDDDD", id);
         const response = await fetch(`${API_URL}?apikey=${API_KEY}&i=${id}&plot=full`);
         const data = await response.json();
-       
-        // debugging
-        console.log("API Dataaaa:", data);
 
         if (data.Response === "True") {
           setMovie(data);

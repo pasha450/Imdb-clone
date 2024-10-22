@@ -8,6 +8,7 @@ import Loading from "./loading";
 import ReactPaginate from 'react-paginate';
 
 
+
 const API_URL = "https://www.omdbapi.com/?apikey=66f12840";
 
 const Dashboard = () => {
@@ -17,13 +18,13 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
 
+
   const { favorites, addToFavorites, removeFromFavorites } = useContext(FavoritesContext); 
   
   const moviesPerPage = 10; 
 
   // Function to search movies based on title and type 
   const searchMovies = async (title, type = "movie", page = 1) => {
-    // setLoading(true);
     setError(null);
     if (title === '') {
       setError("Please Enter the Movie Title");
@@ -55,7 +56,7 @@ useEffect(() => {
     searchMovies("all", "movie", currentPage); 
 }, [currentPage]);
 
-// Handle page click from react-paginate
+
 const handlePageClick = (event) => {
     const selectedPage = event.selected + 1; // React Paginate uses zero-based index
     setCurrentPage(selectedPage);
@@ -77,13 +78,15 @@ const handleFavoriteClick = (movie) => {
 };
 
 if (loading) {
-    return <Loading />; 
+  return <Loading />; 
 }
+
 
 return (
     <>
       <Header onSearch={searchMovies} />
       <ToastContainer position="top-right" autoClose={3000} />
+
 
       <nav id="navigation">
         <div className="container">
@@ -105,8 +108,9 @@ return (
             {!loading && !error && movies.length > 0 && (
               movies.map((movie) => ( 
                 <div className="col-md-4 col-xs-6" key={movie.imdbID}>
-                  <div className="shop">
-                    <div className="shop-img">
+                  <div className="shop"
+                  >
+                  <div className="shop-img">
                       <img
                         src={movie.Poster !== "N/A" ? movie.Poster : "./assests/img/badnews.jpg"}
                         alt={movie.Title}
@@ -151,7 +155,6 @@ return (
         marginPagesDisplayed={1}
       />
 
-      {/* Footer  */} 
       <footer id="footer">
 			<div className="section">
 				<div className="container">

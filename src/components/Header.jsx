@@ -2,19 +2,32 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import MovieModal from "./MovieModal";
+
+
 
 const Header = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [movieData, setMovieData] = useState({
+    title: 'movie',
+    description: 'A mind-bending thriller by Christopher Nolan.',
+    posterUrl: './assests/img/badnews.jpg'
+  });
+
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const trimmedTerm = searchTerm.trim();
     if (trimmedTerm) {
-      onSearch(trimmedTerm); 
+      onSearch(trimmedTerm);
     }
   };
-
+   
   const handleInputChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
@@ -77,11 +90,20 @@ const Header = ({ onSearch }) => {
                   />
                   <i class="fa-solid fa-magnifying-glass-location custom-icon  icon-spacing" ></i>
                 </form>
+                {/* <div class="card">
+                  <h5 class="card-header">Featured</h5>
+                  <div class="card-body">
+                    <h5 class="card-title">Movie</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                  </div>
+                </div> */}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <MovieModal show={showModal} handleClose={closeModal} movieData={movieData} />
     </header>
   );
 };

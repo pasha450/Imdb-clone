@@ -2504,3 +2504,70 @@ body, #main-content {
   margin-left: auto; 
 }
 
+
+/* .modal-backdrop {
+  z-index: 1040;
+}
+.modal {
+  z-index: 1050;
+} */
+
+
+/* for modal  */
+
+/* The modal's background overlay */
+.custom-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000; /* Higher value to ensure it appears above other elements */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+/* Modal content box */
+.custom-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Custom button styling */
+.custom-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.custom-button:hover {
+  background-color: #0056b3;
+}
+
+
+.card{
+  margin-top: 20px;
+  background: #fff;
+  padding: 7px;
+  display: block;
+}
